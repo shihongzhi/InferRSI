@@ -28,7 +28,7 @@ def inspect_environment(
     python = python or sys.executable
     package_code = (
         "import json,sys,importlib.metadata as m\n"
-        "names=['torch','vllm','vllm-omni','vllm-afd-plugin','vllm-rlt','torch-npu',"
+        "names=['torch','vllm','vllm-omni','vllm-afd-plugin','vllm-rlt','torch-npu','mlx',"
         "'nvidia-nccl-cu12','nvidia-nccl-cu13','nvidia-cuda-runtime-cu12',"
         "'nvidia-cuda-runtime-cu13']\n"
         "packages={}\n"

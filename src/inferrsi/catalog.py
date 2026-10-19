@@ -21,7 +21,7 @@ KNOWLEDGE_SCOPES = {
 KNOWLEDGE_REPOS = tuple(
     dict.fromkeys(repo for repos in KNOWLEDGE_SCOPES.values() for repo in repos)
 )
-BACKENDS = ("cpu", "cuda", "rocm", "ascend")
+BACKENDS = ("cpu", "cuda", "rocm", "ascend", "mlx")
 SCENARIO_ALIASES = {
     "diffusion.t2i": "diffusion.image_generation",
     "diffusion.t2v": "diffusion.video_generation",

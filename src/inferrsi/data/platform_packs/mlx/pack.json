@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "mlx",
+  "inspection_tool": "sysctl",
+  "compatibility": "unverified",
+  "notes": [
+    "An Apple Silicon chip report is not MLX or Metal compatibility evidence.",
+    "MLX uses one unified-memory Metal device; discrete device selection does not apply.",
+    "Repository-specific backend experience belongs in its scoped knowledge folder."
+  ]
+}

@@ -70,7 +70,11 @@ inferrsi plan \
 
 Replace `plan` with `run` using the same flags after the plan matches your intended experiment. Script paths are templates that you supply; InferRSI does not create them. Start with one-variable, same-quality configuration optimization. Quantization, TeaCache, generation-step changes and adaptive exit require a quality-changing protocol and an explicit validation script.
 
-On ROCm use `--backend rocm`; on Ascend use `--backend ascend`. The doctor retains raw backend output but does not certify device selection, model support or full topology. Record the actual driver/runtime/communication versions and topology with your experiment evidence.
+On ROCm use `--backend rocm`; on Ascend use `--backend ascend`; for MLX on
+Apple Silicon use `--backend mlx` (unified memory means discrete device IDs do
+not apply). The doctor retains raw backend output but does not certify device
+selection, model support or full topology. Record the actual
+driver/runtime/communication versions and topology with your experiment evidence.
 
 ## Native vLLM-Omni benchmark inside a trial script
 

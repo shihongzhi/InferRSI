@@ -20,7 +20,8 @@ def _common(parser: argparse.ArgumentParser) -> None:
         "--device-ids", default="", help="Comma-separated caller-assigned device IDs"
     )
     parser.add_argument(
-        "--device-model", help="Expected CUDA device model; other probes retain raw output"
+        "--device-model",
+        help="Expected CUDA device model or Apple chip; other probes retain raw output",
     )
     parser.add_argument(
         "--python", default=sys.executable, help="Python used for target package inspection"

@@ -47,6 +47,46 @@ class InspectionTests(unittest.TestCase):
         self.assertEqual(missing["device"]["status"], "unavailable")
 
 
+class MlxInspectionTests(unittest.TestCase):
+    def inspect_mlx(self, chip, model=None):
+        def command(argv):
+            if "-c" in argv:
+                stdout = json.dumps({"python": "test", "packages": {"mlx": None}})
+            elif argv[0] == "sysctl":
+                stdout = chip
+            else:
+                stdout = ""
+            return {"argv": argv, "returncode": 0, "stdout": stdout, "stderr": ""}
+
+        with (
+            patch(
+                "inferrsi.execution.repository_identity",
+                return_value={"available": True, "head": "test"},
+            ),
+            patch("inferrsi.inspection._command", side_effect=command),
+        ):
+            return inspect_environment(".", "vllm_omni", "mlx", device_model=model)
+
+    def test_apple_silicon_chip_is_available(self):
+        result = self.inspect_mlx("Apple M3 Max\n")
+        self.assertEqual(result["device"]["status"], "available")
+        self.assertTrue(result["device"]["selection_verified"])
+        self.assertEqual(result["device"]["chip"], "Apple M3 Max")
+        self.assertEqual(result["backend"], "mlx")
+        self.assertEqual(result["compatibility"], "unverified")
+
+    def test_non_apple_chip_is_not_available(self):
+        result = self.inspect_mlx("Intel(R) Core(TM) i7-9750H CPU @ 2.60GHz\n")
+        self.assertEqual(result["device"]["status"], "unavailable")
+        self.assertFalse(result["device"]["selection_verified"])
+
+    def test_requested_chip_model_must_match(self):
+        mismatch = self.inspect_mlx("Apple M3 Max\n", model="M2 Ultra")
+        self.assertEqual(mismatch["device"]["status"], "device_model_mismatch")
+        matched = self.inspect_mlx("Apple M3 Max\n", model="m3 max")
+        self.assertEqual(matched["device"]["status"], "available")
+
+
 class PythonInspectionTests(unittest.TestCase):
     def test_real_python_reports_requested_versions(self):
         result = inspect_environment(
@@ -67,6 +107,7 @@ class PythonInspectionTests(unittest.TestCase):
             "vllm-afd-plugin",
             "vllm-rlt",
             "torch-npu",
+            "mlx",
             "nvidia-nccl-cu12",
             "nvidia-nccl-cu13",
             "nvidia-cuda-runtime-cu12",
